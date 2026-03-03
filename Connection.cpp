@@ -132,9 +132,11 @@ PyObject* Connection::GetSchema(CSession& session, bool refresh)
 	CCP_LOG_CH( s_chConn, "SQL server version %s", version.c_str());
 
 	// SQL server versions for reference:
-	// 9.=2005, 10.=2008 and 200R2, 11.=2012, 12.=2014, 13.=2016, 14.=2017, 15.=2019, 16.=2022
-	// This test should never exceed three versions, e.g. only test for the "last", "current" and "next" one.
-	if (strncmp(version.c_str(), "14.", 3) && strncmp(version.c_str(), "15.", 3) && strncmp(version.c_str(), "16.", 3)) {
+	// 9.=2005, 10.=2008 and 200R2, 11.=2012, 12.=2014, 13.=2016, 14.=2017, 15.=2019, 16.=2022, 17.=2025
+	// To not break backwards compatibility for EVE, we'll allow more than three versions. First one being the 2017=14 version.
+	if (strncmp(version.c_str(), "14.", 3) && strncmp(version.c_str(), "15.", 3) &&
+		strncmp(version.c_str(), "16.", 3) && strncmp(version.c_str(), "17.", 3))
+	{
 		std::string err("Invalid SQL Server version: ");
 		err += version;
 		PyErr_SetString(PyExc_RuntimeError, err.c_str());
